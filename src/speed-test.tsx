@@ -1,7 +1,8 @@
-import { useState } from "react"
-import { Detail } from "@raycast/api"
+import { useState, useEffect } from "react"
+import { Detail, Environment } from "@raycast/api"
 import readme from './detail-content'
 import { spawn } from 'node:child_process'
+import mockData from './log'
 import {
   ISpeedLog,
   ISpeedTestBasic,
@@ -16,10 +17,10 @@ import {
 * 1. Copy result, and extension and author info
 * 2. Recent Test History
 * */
+let timer: NodeJS.Timeout | null = null
+// timer && clearInterval(timer)
 
 export default function() {
-  console.log('run speed test')
-
   const [stateIsSpeedTesting, setStateIsSpeedTesting] = useState(true)
   const [stateSpeedTestLog, setStateSpeedTestLog] = useState<ISpeedLog>()
   const [stateSpeedTestStart, setStateSpeedTestStart] = useState<ISpeedTestStart>()
@@ -28,12 +29,10 @@ export default function() {
   const [stateSpeedTestUpload, setStateSpeedTestUpload] = useState<ISpeedTestUpload>()
   const [stateSpeedTestResult, setStateSpeedTestResult] = useState<ISpeedTestResult>()
 
+  const [stateSpeedTestMarkdownContent, setStateSpeedTestMarkdownContent] = useState<string>('')
+
   function stdout(data: ISpeedTestBasic){
-    console.log('updating..', data)
     switch (data.type) {
-      case SpeedTestDataType.log:
-        setStateSpeedTestLog(data as ISpeedLog)
-        break
       case SpeedTestDataType.testStart:
         setStateSpeedTestStart(data as ISpeedTestStart)
         break
@@ -52,25 +51,47 @@ export default function() {
     }
   }
 
+  const watchList = [
+    stateSpeedTestLog,
+    stateSpeedTestStart,
+    stateSpeedTestPing,
+    stateSpeedTestDownload,
+    stateSpeedTestUpload,
+    stateSpeedTestResult
+  ]
+  //
+  useEffect(() => {
+    setStateSpeedTestMarkdownContent(readme(
+      stateSpeedTestLog,
+      stateSpeedTestStart,
+      stateSpeedTestPing,
+      stateSpeedTestDownload,
+      stateSpeedTestUpload,
+      stateSpeedTestResult
+    ))
+  }, watchList)
+
   function stderr(error: string) {
-    console.log('err', error)
+    console.log('stderr:', error)
   }
 
-  const cwd = '/opt/homebrew/opt/speedtest/bin'
-  const sp = spawn('speedtest',['-f', 'jsonl'], { cwd, shell: true })
-  sp.stdout.on('data', data => stdout(data.toString()))
-  sp.stderr.on('data', data => stderr(data.toString()))
+  timer && clearInterval(timer)
+  timer = setInterval(() => {
+    if (mockData.length === 0) {
+      timer && clearInterval(timer)
+      return
+    }
 
-  // readme(
-  //   stateSpeedTestLog,
-  //   stateSpeedTestStart,
-  //   stateSpeedTestPing,
-  //   stateSpeedTestDownload,
-  //   stateSpeedTestUpload,
-  //   stateSpeedTestResult
-  // )
+    // stdout(JSON.parse(mockData.shift()))
+
+  }, 60)
+  // const cwd = '/opt/homebrew/opt/speedtest/bin'
+  // const sp = spawn('speedtest',['-f', 'jsonl'], { cwd, shell: true })
+  // sp.stdout.on('data', data => stdout(data.toString()))
+  // sp.stderr.on('data', data => stderr(data.toString()))
 
   return <Detail
-    markdown={ "123" + stateSpeedTestDownload?.download.bandwidth.toString()}
+    // command-icon.png
+    markdown={stateSpeedTestMarkdownContent}
     isLoading={ stateIsSpeedTesting }/>
 }
