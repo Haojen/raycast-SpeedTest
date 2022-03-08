@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Detail } from "@raycast/api"
+import { Detail, ActionPanel, Action, Icon } from "@raycast/api"
 import readme from "./detail-content"
 import mockData from "./log"
 import {
@@ -117,8 +117,17 @@ export default function() {
   // sp.stdout.on('data', data => stdout(data.toString()))
   // sp.stderr.on('data', data => stderr(data.toString()))
 
+  function DetailAction() {
+    return <ActionPanel>
+      <Action title="Create Report" icon={ Icon.Document }/>
+      { false && <Action.OpenInBrowser url={"https://wwww.baidu.com"}/> }
+      { false && <Action.CopyToClipboard title="Copy Results" content={'xxx'} icon={ Icon.Clipboard }/> }
+      <Action.OpenInBrowser title="Help" url="https://wwww.a.com"/>
+    </ActionPanel>
+  }
+
   return <Detail
-    // command-icon.png
+    actions={ <DetailAction/> }
     markdown={stateSpeedTestMarkdownContent}
     isLoading={ stateIsSpeedTesting }/>
 }
