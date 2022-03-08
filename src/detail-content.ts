@@ -6,7 +6,8 @@ import {
 } from "./types"
 
 import { environment } from '@raycast/api'
-
+// {"id":13623,"host":"speedtest.singnet.com.sg","port":8080,"name":"Singtel","location":"Singapore","country":"Singapore","ip":"165.21.70.1"}
+// {"internalIp":"192.168.2.106","name":"en0","macAddr":"F4:D4:88:80:6B:DB","isVpn":false,"externalIp":"222.129.130.228"}
 export default (
   log?: ISpeedLog,
   testStart?: ISpeedTestStart,
@@ -15,27 +16,49 @@ export default (
   upload?: ISpeedTestUpload,
   result?: ISpeedTestResult) => `
 ## SPEEDTEST
----
-Ping: 0ms
+>>>
+Ping: ${ping?.ping.latency || 0}ms
 
-Server: **Kirino Net** to -> **Singtel**
+You IP: ${ testStart?.interface.externalIp }
+
+ISP: ${ testStart?.isp } -> ${ testStart?.server.name } (${ testStart?.server.location  })
 
 ### Download
+Speed: **${download?.download.bandwidth}**
 
-Speed: **100/Mbs**
-
-Progress: [🐰🐰🐰🐰🐰🐰🐰🐰🐰🐰======================] 
+Progress: [${ download?.download.progressUI }] ${(download?.download.progress || 0)}%
 
 ### Upload
 
-Speed: **100.22/Mbs**
+Speed: **${upload?.upload.bandwidth}s**
 
-Progress: [🐢🐢🐢🐢🐢🐢🐢🐢🐢🐢🐢🐢🐢🐢--------------------]
-
+Progress: [${ upload?.upload.progressUI }] ${(upload?.upload.progress || 0)}%
+>>>
 ---
+**Interface**
+
+Name: ${ testStart?.interface.name }
+
+Mac Address: ${ testStart?.interface.macAddr }
+ 
+Local IP: ${ testStart?.interface.internalIp }
+>>>
+**Server**
+
+IP: ${ testStart?.server.ip}
+
+Country: ${ testStart?.server.country}
+
+Host: ${ testStart?.server.host }
+>>>
 Date: 2022:02:02
 
-Get more Speed Test Report: [I'm an inline-style link](https://www.google.com)
+Report ID: xxxxxx
+>>>
+---
+## About
+
+**SPEEDTEST** *Power by ©OOKLA️*
 `
 //
 // ## H1 log

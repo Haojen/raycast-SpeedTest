@@ -54,6 +54,7 @@ export interface ISpeedTestDataUploadAndDownload {
   elapsed: number
   progress: number
   bandwidth: number
+  progressUI?: string
 }
 
 // {"jitter":0,"latency":129.20099999999999,"progress":0.20000000000000001}
