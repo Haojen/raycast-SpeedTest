@@ -1,6 +1,5 @@
 <h1 align="center">
-   <img src="./assets/speedtest.png" width="50px" style="margin-right: 10px;">
-   <strong>SPEEDTEST</strong>
+   <img src="./assets/speedtest-banner.png" width="200">
 </h1>
 <hr>
 <p align="center">

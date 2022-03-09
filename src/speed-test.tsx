@@ -1,16 +1,16 @@
+import readme from "./content"
 import { useEffect, useState } from "react"
 import { spawn } from "node:child_process"
-import { Action, ActionPanel, Detail, Toast, showHUD } from "@raycast/api"
-import readme from "./detail-content"
+import { Action, ActionPanel, Detail, Toast } from "@raycast/api"
 import {
   ISpeedLog,
   ISpeedTestBasic,
-  ISpeedTestDownload,
   ISpeedTestPing,
   ISpeedTestResult,
   ISpeedTestStart,
   ISpeedTestUpload,
-  SpeedTestDataType
+  SpeedTestDataType,
+  ISpeedTestDownload
 } from "./types"
 
 let isSpeedTestRunning = false
