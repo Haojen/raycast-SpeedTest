@@ -1,4 +1,4 @@
-const log = `01:14:06.519 {"type":"log","timestamp":"2022-03-06T17:14:06Z","message":"Error: [0] Timeout occurred in connect.","level":"error"}
+const mockdata = `01:14:06.519 {"type":"log","timestamp":"2022-03-06T17:14:06Z","message":"Error: [0] Timeout occurred in connect.","level":"error"}
 01:14:06.717 {"type":"log","timestamp":"2022-03-06T17:14:06Z","message":"Error: [0] Timeout occurred in connect.","level":"error"}
 01:14:06.869 {"type":"testStart","timestamp":"2022-03-06T17:14:06Z","isp":"Kirino","interface":{"internalIp":"192.168.2.106","name":"en0","macAddr":"F4:D4:88:80:6B:DB","isVpn":false,"externalIp":"222.129.130.228"},"server":{"id":13623,"host":"speedtest.singnet.com.sg","port":8080,"name":"Singtel","location":"Singapore","country":"Singapore","ip":"165.21.70.1"}}
 01:14:06.950 {"type":"ping","timestamp":"2022-03-06T17:14:06Z","ping":{"jitter":0,"latency":81.524000000000001,"progress":0.20000000000000001}}
@@ -520,7 +520,18 @@ const log = `01:14:06.519 {"type":"log","timestamp":"2022-03-06T17:14:06Z","mess
 01:14:38.135 {"type":"upload","timestamp":"2022-03-06T17:14:38Z","upload":{"bandwidth":1953698,"bytes":27634768,"elapsed":14987,"progress":1}}
 01:14:39.708 {"type":"result","timestamp":"2022-03-06T17:14:39Z","ping":{"jitter":0.81799999999999995,"latency":81.843999999999994},"download":{"bandwidth":40714934,"bytes":548587012,"elapsed":15012},"upload":{"bandwidth":1953698,"bytes":27634768,"elapsed":14987},"packetLoss":1.7730496453900708,"isp":"Kirino","interface":{"internalIp":"192.168.2.106","name":"en0","macAddr":"F4:D4:88:80:6B:DB","isVpn":false,"externalIp":"222.129.130.228"},"server":{"id":13623,"host":"speedtest.singnet.com.sg","port":8080,"name":"Singtel","location":"Singapore","country":"Singapore","ip":"165.21.70.1"},"result":{"id":"1f184a9a-fd94-4591-acfc-4cfe2420ffd8","url":"https://www.speedtest.net/result/c/1f184a9a-fd94-4591-acfc-4cfe2420ffd8","persisted":true}}`
 
-const data = log.split(/\n/).map((item, index) => {
+// let timer: NodeJS.Timeout | null = null
+// timer && clearInterval(timer)
+// timer = setInterval(() => {
+//   if (mockData.length === 0) {
+//     setStateIsSpeedTesting(false)
+//     timer && clearInterval(timer)
+//     return
+//   }
+//
+//   stdout(JSON.parse(mockData.shift()))
+// }, 100)
+const data = mockdata.split(/\n/).map((item, index) => {
   return item.substring(13) //JSON.parse()
 })
 

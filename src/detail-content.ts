@@ -6,53 +6,74 @@ import {
 } from "./types"
 
 const megabit = 125000
-// {"id":13623,"host":"speedtest.singnet.com.sg","port":8080,"name":"Singtel","location":"Singapore","country":"Singapore","ip":"165.21.70.1"}
-// {"internalIp":"192.168.2.106","name":"en0","macAddr":"F4:D4:88:80:6B:DB","isVpn":false,"externalIp":"222.129.130.228"}
-// "result":{"id":"4b735fec-11ec-4b2e-8fbd-7eb80dd72c56","url":"https://www.speedtest.net/result/c/4b735fec-11ec-4b2e-8fbd-7eb80dd72c56","persisted":true}
+const PROGRESS_AMOUNT = 12
+const PROGRESS_PREFIX_FILL = '︎▪︎'
+const PROGRESS_PLACEHOLDER = '▫︎'
+const IP_PLACEHOLDER = '0.0.0.0'
 export default (
-  log?: ISpeedLog,
-  testStart?: ISpeedTestStart,
-  ping?: ISpeedTestPing,
-  download?: ISpeedTestDownload,
-  upload?: ISpeedTestUpload,
-  result?: ISpeedTestResult) => `
+  log?: ISpeedLog, testStart?: ISpeedTestStart, ping?: ISpeedTestPing,
+  download?: ISpeedTestDownload, upload?: ISpeedTestUpload, result?: ISpeedTestResult) => {
+
+  const downloadProgressUI = Array(PROGRESS_AMOUNT).fill(PROGRESS_PLACEHOLDER)
+  if (download) {
+    const progressNumber = Math.floor(download.download.progress * (PROGRESS_AMOUNT - 1))
+
+    for (let i = 0; i <= progressNumber; i++) {
+      downloadProgressUI[i] = PROGRESS_PREFIX_FILL
+    }
+  }
+
+  const uploadProgressUI = Array(PROGRESS_AMOUNT).fill(PROGRESS_PLACEHOLDER)
+  if (upload) {
+    const progressNumber = Math.floor(upload.upload.progress * (PROGRESS_AMOUNT - 1))
+
+    for (let i = 0; i <= progressNumber; i++) {
+      uploadProgressUI[i] = PROGRESS_PREFIX_FILL
+    }
+  }
+
+  let ISPInfo = 'Unknown'
+  if (testStart?.isp && testStart?.server) {
+    ISPInfo = `${ testStart?.isp } -> ${ testStart?.server.name } (${ testStart?.server.location })`
+  }
+return `
 ## SPEEDTEST
 >>>
-📶 Ping: ${ping?.ping.latency || 0}ms
+📶 Ping: ${ ping?.ping.latency || 0 }ms
 
-🧑‍💻 You IP: ${ testStart?.interface.externalIp }
+🧑‍💻 You IP: ${ testStart?.interface.externalIp || IP_PLACEHOLDER }
 
-📡 ISP: ${ testStart?.isp } -> ${ testStart?.server.name } (${ testStart?.server.location  })
+📡 ISP: ${ ISPInfo }
 
 ### Download
 ⏬ Speed: **${((download?.download.bandwidth || 0) / megabit).toFixed(2) }**/Mbps
 
-Progress: ${ download?.download.progressUI } ${(download?.download.progress || 0)}%
+Progress: [ ${ downloadProgressUI.join('') } ]
 
 ### Upload
 
-⏫ Speed: **${((upload?.upload.bandwidth || 0) / megabit).toFixed(2)}/Mbs**
+⏫ Speed: **${((upload?.upload.bandwidth || 0) / megabit).toFixed(2)}**/Mbps
 
-Progress: ${ upload?.upload.progressUI } ${(upload?.upload.progress || 0)}%
+Progress: [ ${ uploadProgressUI.join('') } ]
 >>>
 ---
 **Interface**
 
 Name: ${ testStart?.interface.name }
  
-Local IP: ${ testStart?.interface.internalIp }
+Local IP: ${ testStart?.interface.internalIp || IP_PLACEHOLDER }
 
-Mac Address: ${ testStart?.interface.macAddr }
+Mac Address: ${ testStart?.interface.macAddr || ':::::' }
 >>>
 **Server**
 
-IP: ${ testStart?.server.ip}
+IP: ${ testStart?.server.ip || IP_PLACEHOLDER }
 
-Country: ${ testStart?.server.country}
+Country: ${ testStart?.server.country || '🌍' }
 
-Host: ${ testStart?.server.host }
+Host: ${ testStart?.server.host || '🛰' }
 >>>
-Date: ${ testStart?.timestamp }
+Date: ${ testStart?.timestamp || '⏰' }
 
 Report ID: ${ result?.result.id ? result?.result.id : 'Report not created' }
 >>>
@@ -61,3 +82,4 @@ Report ID: ${ result?.result.id ? result?.result.id : 'Report not created' }
 
 **SPEEDTEST** *Power by ©OOKLA️*
 `
+}
