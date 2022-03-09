@@ -3,7 +3,7 @@
   "name": "speed-test",
   "title": "Speed Test",
   "description": "Network Speed Test",
-  "icon": "command-icon.png",
+  "icon": "logo.png",
   "author": "Haojen",
   "license": "MIT",
   "commands": [

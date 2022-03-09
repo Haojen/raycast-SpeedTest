@@ -80,6 +80,6 @@ Report ID: ${ result?.result.id ? result?.result.id : 'Report not created' }
 ---
 ## About
 
-**SPEEDTEST** *Power by ©OOKLA️*
+**SPEEDTEST** *Power by Ookla️*
 `
 }
