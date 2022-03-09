@@ -1,33 +1,45 @@
-<h1 align="center">
-   <img src="./assets/speedtest-banner.png" width="200">
-</h1>
+<p align="center">
+   <img src="./assets/logo.png" width="128">
+   <br>
+   <span style="font-size: x-large; font-weight: bold">Speed Test</span>
+   <br>
+   <span>
+    A Raycast network speed test Extension. Based of Speedtest®
+   </span>
+</p>
 <hr>
-<p align="center">
-   Date: 2022:02:02  Ping: 0ms  
-   <br>
-   Server: Kirino Net to -> Singtel
-   <br>
-</p>
-<p align="center">
-   Download Speed:
-   <span>100/Mbs</span> 
-   <br>
-   Download Progress:
-   <span style="color:rebeccapurple;"> [======================================]</span>
-   <span>100%</span>
-</p>
-<p align="center">
-   Upload Speed: <span>100.22/Mbs</span> 
-   <br>
-   Upload Progress:
-   <span style="color: lightseagreen;"> [======================--------------------]</span>
-   <span>100%</span>
-</p>
-<p align="center">
-   Get more Speed Test Report:
-   <a href="https://www.badu.com">https://www.speedtest.net/zh-Hans/result/12858880938</a>
-</p>
-<br>
+
+### Before Using
+Before you using this extension, You need install `SPEEDTEST-CLI`.
+
+Using `Homebrew` install. You can click this link learns what is [Homebrew](https://brew.sh/).
+```shell
+brew tap teamookla/speedtest
+brew update
+# Example how to remove conflicting or old versions using brew
+# brew uninstall speedtest --force
+brew install speedtest --force
+```
+
+### Support
+We based `SPEEDTEST-CLI` version(**1.1.1.84**) or above created, If you are meet some trouble, you can first check
+you version.
+
+### Privacy
+As we said, We based Speedtest® created. so if you want to know Privacy Policy you can go [Speedtest® Privacy](https://www.speedtest.net/about/privacy)
+get more. Beyond that, This Extension don't collect any additional information.
+
 <hr>
-<img align="center"  src="./assets/OOKLA.png" height="55" style="filter: invert()">
+<h3 align="center" style="font-weight: lighter">
+    About & Thanks 
+</h3>
+<p align="center">
+    <a href="https://www.ookla.com/">
+        <img align="center"  src="./assets/Ookla-black.png" height="30">
+    </a>
+    <br/>
+    <a href="https://speedtest.net">
+        <img src="./assets/speedtest-banner.png" width="140" style="margin-top: 5px">
+    </a>
+</p>
 
