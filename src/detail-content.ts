@@ -1,5 +1,4 @@
 import {
-  ISpeedLog,
   ISpeedTestDownload,
   ISpeedTestPing, ISpeedTestResult,
   ISpeedTestStart, ISpeedTestUpload,
@@ -11,8 +10,8 @@ const PROGRESS_PREFIX_FILL = '︎▪︎'
 const PROGRESS_PLACEHOLDER = '▫︎'
 const IP_PLACEHOLDER = '0.0.0.0'
 export default (
-  log?: ISpeedLog, testStart?: ISpeedTestStart, ping?: ISpeedTestPing,
-  download?: ISpeedTestDownload, upload?: ISpeedTestUpload, result?: ISpeedTestResult) => {
+  testStart?: ISpeedTestStart, ping?: ISpeedTestPing, download?: ISpeedTestDownload,
+  upload?: ISpeedTestUpload, result?: ISpeedTestResult) => {
 
   const downloadProgressUI = Array(PROGRESS_AMOUNT).fill(PROGRESS_PLACEHOLDER)
   if (download) {
@@ -80,6 +79,6 @@ Report ID: ${ result?.result.id ? result?.result.id : 'Report not created' }
 ---
 ## About
 
-**SPEEDTEST** *Power by Ookla️*
+Speedtest by Ookla 
 `
 }

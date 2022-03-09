@@ -84,7 +84,6 @@ export interface ISpeedTestDataServer {
 }
 // order by order
 export enum SpeedTestDataType {
-  log = 'log',
   testStart = 'testStart',
   Ping = 'ping',
   Download = 'download',
