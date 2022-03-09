@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { spawn } from 'node:child_process'
 import { Detail, ActionPanel, Action, Icon } from "@raycast/api"
 import readme from "./detail-content"
 import mockData from "./log"
@@ -17,12 +18,16 @@ import {
 * 1. Copy result, and extension and author info
 * 2. Recent Test History
 * */
-const placeholder = Array(10).fill('🐢')
-
+const PROGRESS_PREFIX_FILL = '︎▪︎'
+const PROGRESS_AMOUNT = 20
+const PROGRESS_PREFIX_UPLOAD = Array(PROGRESS_AMOUNT).fill('▫︎')
+const PROGRESS_PREFIX_DOWNLOAD = Array(PROGRESS_AMOUNT).fill('▫︎')
 let timer: NodeJS.Timeout | null = null
 
+let isSpeedTestRuning = false
+
 export default function() {
-  const [stateIsSpeedTesting, setStateIsSpeedTesting] = useState(false)
+  const [stateIsSpeedTesting, setStateIsSpeedTesting] = useState(true)
   const [stateSpeedTestLog, setStateSpeedTestLog] = useState<ISpeedLog>()
   const [stateSpeedTestStart, setStateSpeedTestStart] = useState<ISpeedTestStart>()
   const [stateSpeedTestPing, setStateSpeedTestPing] = useState<ISpeedTestPing>()
@@ -32,10 +37,8 @@ export default function() {
 
   const [stateSpeedTestMarkdownContent, setStateSpeedTestMarkdownContent] = useState<string>('')
 
-  const PROGRESS_PREFIX_UPLOAD = '🐢'
-  const PROGRESS_PREFIX_DOWNLOAD = '🐰'
-
   function stdout(data: ISpeedTestBasic){
+    console.log('sin',data)
     if (data.type === SpeedTestDataType.testStart) {
       setStateSpeedTestStart(data as ISpeedTestStart)
       return
@@ -46,28 +49,28 @@ export default function() {
     }
     if (data.type === SpeedTestDataType.Download) {
       const download = data as ISpeedTestDownload
-      const progressNumber = Math.floor(download.download.progress * (placeholder.length - 1))
+      const progressNumber = Math.floor(download.download.progress * (PROGRESS_AMOUNT - 1))
 
       for (let i = 0; i <= progressNumber; i++) {
-        placeholder[i] = PROGRESS_PREFIX_DOWNLOAD
+        PROGRESS_PREFIX_DOWNLOAD[i] = PROGRESS_PREFIX_FILL
       }
 
       download.download.progress = parseFloat((download.download.progress * 100).toFixed(1))
-      download.download.progressUI = placeholder.join('')
+      download.download.progressUI = PROGRESS_PREFIX_DOWNLOAD.join('')
 
       setStateSpeedTestDownload(download)
       return
     }
     if (data.type === SpeedTestDataType.Upload) {
       const upload = data as ISpeedTestUpload
-      const progressNumber = Math.floor(upload.upload.progress * (placeholder.length - 1))
+      const progressNumber = Math.floor(upload.upload.progress * (PROGRESS_AMOUNT - 1))
 
       for (let i = 0; i <= progressNumber; i++) {
-        placeholder[i] = PROGRESS_PREFIX_UPLOAD
+        PROGRESS_PREFIX_UPLOAD[i] = PROGRESS_PREFIX_FILL
       }
 
       upload.upload.progress = parseFloat((upload.upload.progress * 100).toFixed(1))
-      upload.upload.progressUI = placeholder.join('')
+      upload.upload.progressUI = PROGRESS_PREFIX_UPLOAD.join('')
 
       setStateSpeedTestUpload(upload)
       return
@@ -102,20 +105,29 @@ export default function() {
     console.log('stderr:', error)
   }
 
-  timer && clearInterval(timer)
-  timer = setInterval(() => {
-    if (mockData.length === 0) {
-      timer && clearInterval(timer)
-      return
-    }
 
-    stdout(JSON.parse(mockData.shift()))
+  // timer && clearInterval(timer)
+  // timer = setInterval(() => {
+  //   if (mockData.length === 0) {
+  //     setStateIsSpeedTesting(false)
+  //     timer && clearInterval(timer)
+  //     return
+  //   }
+  //
+  //   stdout(JSON.parse(mockData.shift()))
+  // }, 100)
 
-  }, 10)
-  // const cwd = '/opt/homebrew/opt/speedtest/bin'
-  // const sp = spawn('speedtest',['-f', 'jsonl'], { cwd, shell: true })
-  // sp.stdout.on('data', data => stdout(data.toString()))
-  // sp.stderr.on('data', data => stderr(data.toString()))
+  function runSpeedTest() {
+    if (isSpeedTestRuning) return
+    isSpeedTestRuning = true
+    const cwd = '/opt/homebrew/opt/speedtest/bin'
+    const sp = spawn('speedtest',['-f', 'jsonl'], { cwd, shell: true })
+
+    sp.stdout.on('data', data => stdout(JSON.parse(data.toString())))
+    sp.stderr.on('data', data => stderr(data.toString()))
+  }
+
+  runSpeedTest()
 
   function DetailAction() {
     return <ActionPanel>

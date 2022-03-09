@@ -18,31 +18,31 @@ export default (
   result?: ISpeedTestResult) => `
 ## SPEEDTEST
 >>>
-Ping: ${ping?.ping.latency || 0}ms
+📶 Ping: ${ping?.ping.latency || 0}ms
 
-You IP: ${ testStart?.interface.externalIp }
+🧑‍💻 You IP: ${ testStart?.interface.externalIp }
 
-ISP: ${ testStart?.isp } -> ${ testStart?.server.name } (${ testStart?.server.location  })
+📡 ISP: ${ testStart?.isp } -> ${ testStart?.server.name } (${ testStart?.server.location  })
 
 ### Download
-Speed: **${((download?.download.bandwidth || 0) / megabit).toFixed(2) }/Mbs**
+⏬ Speed: **${((download?.download.bandwidth || 0) / megabit).toFixed(2) }**/Mbps
 
-Progress: [${ download?.download.progressUI }] ${(download?.download.progress || 0)}%
+Progress: ${ download?.download.progressUI } ${(download?.download.progress || 0)}%
 
 ### Upload
 
-Speed: **${((upload?.upload.bandwidth || 0) / megabit).toFixed(2)}/Mbs**
+⏫ Speed: **${((upload?.upload.bandwidth || 0) / megabit).toFixed(2)}/Mbs**
 
-Progress: [${ upload?.upload.progressUI }] ${(upload?.upload.progress || 0)}%
+Progress: ${ upload?.upload.progressUI } ${(upload?.upload.progress || 0)}%
 >>>
 ---
 **Interface**
 
 Name: ${ testStart?.interface.name }
-
-Mac Address: ${ testStart?.interface.macAddr }
  
 Local IP: ${ testStart?.interface.internalIp }
+
+Mac Address: ${ testStart?.interface.macAddr }
 >>>
 **Server**
 
@@ -52,30 +52,12 @@ Country: ${ testStart?.server.country}
 
 Host: ${ testStart?.server.host }
 >>>
-Date: 2022:02:02
+Date: ${ testStart?.timestamp }
 
-Report ID: ${ result?.result.id ? '*' + result?.result.id + '*' : 'Report not created' }
+Report ID: ${ result?.result.id ? result?.result.id : 'Report not created' }
 >>>
 ---
 ## About
 
 **SPEEDTEST** *Power by ©OOKLA️*
 `
-//
-// ## H1 log
-// ${ log?.message }
-// ## H2 testStart
-// ${ testStart?.isp }
-// ${ JSON.stringify(testStart?.server) }
-// ${ testStart?.interface }
-// ${ testStart?.timestamp }
-// ## H3 ping
-// ${ JSON.stringify(ping?.ping) }
-// ${ ping?.timestamp }
-// #### H4 download
-// ${ JSON.stringify(download)}
-// ${ download?.timestamp }
-// ##### H5 upload
-// ${ JSON.stringify(upload?.upload) }
-// ###### H6 result
-// ${ JSON.stringify(result?.result) }
