@@ -35,9 +35,10 @@ export default (
   if (testStart?.isp && testStart?.server) {
     ISPInfo = `${ testStart?.isp } -> ${ testStart?.server.name } (${ testStart?.server.location })`
   }
+
 return `
-## SPEEDTEST
->>>
+### Connection
+
 📶 Ping: ${ ping?.ping.latency || 0 }ms
 
 🧑‍💻 You IP: ${ testStart?.interface.externalIp || IP_PLACEHOLDER }
@@ -80,5 +81,4 @@ Report ID: ${ result?.result.id ? result?.result.id : 'Report not created' }
 ## About
 
 Speedtest by Ookla 
-`
-}
+`}

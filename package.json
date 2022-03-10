@@ -15,6 +15,16 @@
       "mode": "view"
     }
   ],
+  "preferences": [
+    {
+      "type": "textfield",
+      "title": "SpeedTest Install Path",
+      "name": "SpeedTestInstallPath",
+      "required": false,
+      "default": "/opt/homebrew/opt/speedtest/bin",
+      "description": "Homebrew SpeedTest install path"
+    }
+  ],
   "dependencies": {
     "@raycast/api": "^1.29.1",
     "morse": "^0.1.0",

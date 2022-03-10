@@ -1,7 +1,8 @@
-import readme from "./content"
-import { useEffect, useState } from "react"
+import markdownContent from "./content"
+import errorMarkdownContent from './error'
 import { spawn } from "node:child_process"
-import { Action, ActionPanel, Detail, Toast } from "@raycast/api"
+import { useEffect, useState } from "react"
+import { Action, ActionPanel, Detail, Toast, getPreferenceValues } from "@raycast/api"
 import {
   ISpeedLog,
   ISpeedTestBasic,
@@ -24,6 +25,9 @@ export default function() {
   const [stateSpeedTestResult, setStateSpeedTestResult] = useState<ISpeedTestResult>()
 
   const [stateSpeedTestMarkdownContent, setStateSpeedTestMarkdownContent] = useState<string>('')
+  const [stateMarkdownErrorContent, setStateMarkdownErrorContent] = useState<string>('')
+
+  const SpeedTestInstallPath = getPreferenceValues().SpeedTestInstallPath
 
   function stdout(data: ISpeedTestBasic){
     const updateDataMap = {
@@ -54,18 +58,21 @@ export default function() {
     stateSpeedTestUpload,
     stateSpeedTestResult
   ]
-  //
+
   useEffect(() => {
-    setStateSpeedTestMarkdownContent(readme(
-      stateSpeedTestStart,
-      stateSpeedTestPing,
-      stateSpeedTestDownload,
-      stateSpeedTestUpload,
-      stateSpeedTestResult
-    ))
+    setStateSpeedTestMarkdownContent(
+        markdownContent(
+          stateSpeedTestStart,
+          stateSpeedTestPing,
+          stateSpeedTestDownload,
+          stateSpeedTestUpload,
+          stateSpeedTestResult
+        )
+    )
 
     if (stateSpeedTestResult?.result.id) {
       setStateIsSpeedTesting(false)
+
       new Toast({
         title: 'Speed Test',
         message: 'Test Finished.',
@@ -90,17 +97,19 @@ export default function() {
     isSpeedTestRunning = true
 
     setStateIsSpeedTesting(true)
-    const cwd = '/opt/homebrew/opt/speedtest/bin'
-    const sp = spawn('speedtest',['-f', 'jsonl'], { cwd, shell: true })
+
+    const sp = spawn('speedtest',['-f', 'jsonl'], { cwd: SpeedTestInstallPath, shell: true })
+    sp.on('error', () => {
+      setStateIsSpeedTesting(false)
+      setStateMarkdownErrorContent(errorMarkdownContent())
+    })
 
     sp.stdout.on('data', data => stdout(JSON.parse(data.toString())))
     sp.stderr.on('data', data => {
       try {
         stderr(JSON.parse(data.toString()))
       }
-      catch (err) {
-        console.log('Not JSON Format Error')
-      }
+      catch (err) { console.log('Not JSON Format Error') }
     })
   }
 
@@ -118,6 +127,6 @@ export default function() {
 
   return <Detail
     actions={ <DetailAction/> }
-    markdown={stateSpeedTestMarkdownContent}
+    markdown={ stateMarkdownErrorContent ? stateMarkdownErrorContent : stateSpeedTestMarkdownContent}
     isLoading={ stateIsSpeedTesting }/>
 }

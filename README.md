@@ -1,13 +1,20 @@
 <p align="center">
    <img src="./assets/logo.png" width="128">
    <br>
-   <span style="font-size: x-large; font-weight: bold">Speed Test</span>
+   <span style="font-size: xx-large; font-weight: bolder">Speed Test</span>
    <br>
    <span>
     A Raycast network speed test Extension. Based of Speedtest®
    </span>
 </p>
 <hr>
+
+### Features
+
+- Download/Upload Speed
+- Show Public Network IP
+- See Your ISP Provider
+- Check Connection Ping
 
 ### Before Using
 Before you using this extension, You need install `SPEEDTEST-CLI`.
@@ -25,9 +32,11 @@ brew install speedtest --force
 We based `SPEEDTEST-CLI` version(**1.1.1.84**) or above created, If you are meet some trouble, you can first check
 you version.
 
+The homebrew default install Speedtest location is `/opt/homebrew/opt/speedtest/bin`, or you can specify in SpeedTest config.
+
 ### Privacy
 As we said, We based Speedtest® created. so if you want to know Privacy Policy you can go [Speedtest® Privacy](https://www.speedtest.net/about/privacy)
-get more. Beyond that, This Extension don't collect any additional information.
+get more. Besides,This Extension don't collect other User Information.
 
 <hr>
 <h3 align="center" style="font-weight: lighter">
