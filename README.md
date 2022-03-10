@@ -15,10 +15,11 @@
 
 ### Features
 
-- Download/Upload Speed
-- Show Public Network IP
-- See Your ISP Provider
+- Test Download/Upload Speed
+- Get Public Network IP
+- Show ISP Provider
 - Check Connection Ping
+- Get Result Report
 
 ### Before Using
 Before you use this extension, You need to use `Homebrew` to install `SPEEDTEST-CLI`.
@@ -36,11 +37,10 @@ brew install speedtest --force
 We based `SPEEDTEST-CLI` version(**1.1.1.84**) or above created, If you are meet some trouble, you can first check
 your version.
 
-The homebrew default install Speedtest path is `/opt/homebrew/opt/speedtest/bin`.  If you change the Homebrew default install location, you can specify your install location in the extension config.
+Homebrew default install Speedtest path is `/opt/homebrew/opt/speedtest/bin`.  If you change the Homebrew default install location, you can specify your install location in the extension config.
 
 ### Privacy
-As we said, We based Speedtest® created. so if you want to know Privacy Policy you can go [Speedtest® Privacy](https://www.speedtest.net/about/privacy)
-get more. Besides, This Extension doesn't collect other user information.
+As we said we based Speedtest® created. so if you want to know Privacy Policy you can go to [Speedtest® Privacy](https://www.speedtest.net/about/privacy). Besides we doesn't collect any other user information.
 
 <hr>
 <h3 align="center">
