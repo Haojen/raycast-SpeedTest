@@ -1,8 +1,4 @@
-import {
-  ISpeedTestDownload,
-  ISpeedTestPing, ISpeedTestResult,
-  ISpeedTestStart, ISpeedTestUpload,
-} from "./types"
+import { ISpeedTestDownload, ISpeedTestPing, ISpeedTestResult, ISpeedTestStart, ISpeedTestUpload } from './types'
 
 const megabit = 125000
 const PROGRESS_AMOUNT = 12
@@ -10,9 +6,12 @@ const PROGRESS_PREFIX_FILL = '︎▪︎'
 const PROGRESS_PLACEHOLDER = '▫︎'
 const IP_PLACEHOLDER = '0.0.0.0'
 export default (
-  testStart?: ISpeedTestStart, ping?: ISpeedTestPing, download?: ISpeedTestDownload,
-  upload?: ISpeedTestUpload, result?: ISpeedTestResult) => {
-
+  testStart?: ISpeedTestStart,
+  ping?: ISpeedTestPing,
+  download?: ISpeedTestDownload,
+  upload?: ISpeedTestUpload,
+  result?: ISpeedTestResult
+) => {
   const downloadProgressUI = Array(PROGRESS_AMOUNT).fill(PROGRESS_PLACEHOLDER)
   if (download) {
     const progressNumber = Math.floor(download.download.progress * (PROGRESS_AMOUNT - 1))
@@ -33,52 +32,53 @@ export default (
 
   let ISPInfo = 'Unknown'
   if (testStart?.isp && testStart?.server) {
-    ISPInfo = `${ testStart?.isp } -> ${ testStart?.server.name } (${ testStart?.server.location })`
+    ISPInfo = `${testStart?.isp} -> ${testStart?.server.name} (${testStart?.server.location})`
   }
 
-return `
+  return `
 ### Connection
 
-📶 Ping: ${ ping?.ping.latency || 0 }ms
+📶 Ping: ${ping?.ping.latency || 0}ms
 
-🧑‍💻 You IP: ${ testStart?.interface.externalIp || IP_PLACEHOLDER }
+🧑‍💻 You IP: ${testStart?.interface.externalIp || IP_PLACEHOLDER}
 
-📡 ISP: ${ ISPInfo }
+📡 ISP: ${ISPInfo}
 
 ### Download
-⏬ Speed: **${((download?.download.bandwidth || 0) / megabit).toFixed(2) }**/Mbps
+⏬ Speed: **${((download?.download.bandwidth || 0) / megabit).toFixed(2)}**/Mbps
 
-Progress: [ ${ downloadProgressUI.join('') } ]
+Progress: [ ${downloadProgressUI.join('')} ]
 
 ### Upload
 
 ⏫ Speed: **${((upload?.upload.bandwidth || 0) / megabit).toFixed(2)}**/Mbps
 
-Progress: [ ${ uploadProgressUI.join('') } ]
+Progress: [ ${uploadProgressUI.join('')} ]
 >>>
 ---
 **Interface**
 
-Name: ${ testStart?.interface.name }
+Name: ${testStart?.interface.name}
  
-Local IP: ${ testStart?.interface.internalIp || IP_PLACEHOLDER }
+Local IP: ${testStart?.interface.internalIp || IP_PLACEHOLDER}
 
-Mac Address: ${ testStart?.interface.macAddr || ':::::' }
+Mac Address: ${testStart?.interface.macAddr || ':::::'}
 >>>
 **Server**
 
-IP: ${ testStart?.server.ip || IP_PLACEHOLDER }
+IP: ${testStart?.server.ip || IP_PLACEHOLDER}
 
-Country: ${ testStart?.server.country || '🌍' }
+Country: ${testStart?.server.country || '🌍'}
 
-Host: ${ testStart?.server.host || '🛰' }
+Host: ${testStart?.server.host || '🛰'}
 >>>
-Date: ${ testStart?.timestamp || '⏰' }
+Date: ${testStart?.timestamp || '⏰'}
 
-Report ID: ${ result?.result.id ? result?.result.id : 'Report not created' }
+Report ID: ${result?.result.id ? result?.result.id : 'Report not created'}
 >>>
 ---
 ## About
 
 Speedtest by Ookla 
-`}
+`
+}

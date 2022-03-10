@@ -9,6 +9,6 @@ brew update
 brew install speedtest --force
 \`\`\`
 `
-export default function() {
-return content
+export default function () {
+  return content
 }

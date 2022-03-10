@@ -1,8 +1,8 @@
-import markdownContent from "./content"
+import markdownContent from './content'
 import errorMarkdownContent from './error'
-import { spawn } from "node:child_process"
-import { useEffect, useState } from "react"
-import { Action, ActionPanel, Detail, Toast, getPreferenceValues } from "@raycast/api"
+import { spawn } from 'node:child_process'
+import { useEffect, useState } from 'react'
+import { Action, ActionPanel, Detail, Toast, getPreferenceValues } from '@raycast/api'
 import {
   ISpeedLog,
   ISpeedTestBasic,
@@ -11,12 +11,12 @@ import {
   ISpeedTestStart,
   ISpeedTestUpload,
   SpeedTestDataType,
-  ISpeedTestDownload
-} from "./types"
+  ISpeedTestDownload,
+} from './types'
 
 let isSpeedTestRunning = false
 
-export default function() {
+export default function () {
   const [stateIsSpeedTesting, setStateIsSpeedTesting] = useState(false)
   const [stateSpeedTestStart, setStateSpeedTestStart] = useState<ISpeedTestStart>()
   const [stateSpeedTestPing, setStateSpeedTestPing] = useState<ISpeedTestPing>()
@@ -29,7 +29,7 @@ export default function() {
 
   const SpeedTestInstallPath = getPreferenceValues().SpeedTestInstallPath
 
-  function stdout(data: ISpeedTestBasic){
+  function stdout(data: ISpeedTestBasic) {
     const updateDataMap = {
       [SpeedTestDataType.testStart]() {
         setStateSpeedTestStart(data as ISpeedTestStart)
@@ -45,7 +45,7 @@ export default function() {
       },
       [SpeedTestDataType.result]() {
         setStateSpeedTestResult(data as ISpeedTestResult)
-      }
+      },
     }
 
     updateDataMap[data.type]()
@@ -56,18 +56,18 @@ export default function() {
     stateSpeedTestPing,
     stateSpeedTestDownload,
     stateSpeedTestUpload,
-    stateSpeedTestResult
+    stateSpeedTestResult,
   ]
 
   useEffect(() => {
     setStateSpeedTestMarkdownContent(
-        markdownContent(
-          stateSpeedTestStart,
-          stateSpeedTestPing,
-          stateSpeedTestDownload,
-          stateSpeedTestUpload,
-          stateSpeedTestResult
-        )
+      markdownContent(
+        stateSpeedTestStart,
+        stateSpeedTestPing,
+        stateSpeedTestDownload,
+        stateSpeedTestUpload,
+        stateSpeedTestResult
+      )
     )
 
     if (stateSpeedTestResult?.result.id) {
@@ -76,7 +76,7 @@ export default function() {
       new Toast({
         title: 'Speed Test',
         message: 'Test Finished.',
-        style: Toast.Style.Success
+        style: Toast.Style.Success,
       }).show()
     }
   }, watchList)
@@ -88,7 +88,7 @@ export default function() {
     new Toast({
       title: 'Error',
       message: 'Please check you network connection.',
-      style: Toast.Style.Failure
+      style: Toast.Style.Failure,
     }).show()
   }
 
@@ -98,35 +98,40 @@ export default function() {
 
     setStateIsSpeedTesting(true)
 
-    const sp = spawn('speedtest',['-f', 'jsonl'], { cwd: SpeedTestInstallPath, shell: true })
+    const sp = spawn('speedtest', ['-f', 'jsonl'], { cwd: SpeedTestInstallPath, shell: true })
     sp.on('error', () => {
       setStateIsSpeedTesting(false)
       setStateMarkdownErrorContent(errorMarkdownContent())
     })
 
-    sp.stdout.on('data', data => stdout(JSON.parse(data.toString())))
-    sp.stderr.on('data', data => {
+    sp.stdout.on('data', (data) => stdout(JSON.parse(data.toString())))
+    sp.stderr.on('data', (data) => {
       try {
         stderr(JSON.parse(data.toString()))
+      } catch (err) {
+        console.log('Not JSON Format Error')
       }
-      catch (err) { console.log('Not JSON Format Error') }
     })
   }
 
   runSpeedTest()
 
   function DetailAction() {
-    return <ActionPanel>
-      {
-        stateSpeedTestResult?.result.url &&
-        <Action.OpenInBrowser title="Result Details" url={ stateSpeedTestResult?.result.url }/>
-      }
-      <Action.OpenInBrowser title="Help" url="https://github.com/haojen/raycast-speedtest"/>
-    </ActionPanel>
+    return (
+      <ActionPanel>
+        {stateSpeedTestResult?.result.url && (
+          <Action.OpenInBrowser title="Result Details" url={stateSpeedTestResult?.result.url} />
+        )}
+        <Action.OpenInBrowser title="Help" url="https://github.com/haojen/raycast-speedtest" />
+      </ActionPanel>
+    )
   }
 
-  return <Detail
-    actions={ <DetailAction/> }
-    markdown={ stateMarkdownErrorContent ? stateMarkdownErrorContent : stateSpeedTestMarkdownContent}
-    isLoading={ stateIsSpeedTesting }/>
+  return (
+    <Detail
+      actions={<DetailAction />}
+      markdown={stateMarkdownErrorContent ? stateMarkdownErrorContent : stateSpeedTestMarkdownContent}
+      isLoading={stateIsSpeedTesting}
+    />
+  )
 }

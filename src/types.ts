@@ -9,7 +9,7 @@ export interface ISpeedLog extends ISpeedTestBasic {
 }
 
 export interface ISpeedTestStart extends ISpeedTestBasic {
-  isp:string
+  isp: string
   interface: ISpeedTestDataInterface
   server: ISpeedTestDataServer
 }
@@ -73,5 +73,5 @@ export enum SpeedTestDataType {
   Ping = 'ping',
   Download = 'download',
   Upload = 'upload',
-  result = 'result'
+  result = 'result',
 }
