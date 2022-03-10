@@ -11,7 +11,7 @@
   </span>
 </p>
 
-<hr/> 
+---
 
 ### Features
 
@@ -42,7 +42,8 @@ Homebrew default install Speedtest path is `/opt/homebrew/opt/speedtest/bin`.  I
 ### Privacy
 As we said we based Speedtest® created. so if you want to know the Privacy Policy you can go to [Speedtest® Privacy](https://www.speedtest.net/about/privacy). Besides, we don't collect any other user information.
 
-<hr>
+---
+
 <h3 align="center">
     About & Thanks 
 </h3>
